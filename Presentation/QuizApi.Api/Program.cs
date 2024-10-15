@@ -23,3 +23,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+//repolari ekle
+//service reg ekle bunlari
+// mig olustur

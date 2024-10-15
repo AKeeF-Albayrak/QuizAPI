@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Entities\Answer.cs~RFad925c4.TMP" />
+  </ItemGroup>
+
 </Project>
