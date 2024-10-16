@@ -14,7 +14,5 @@ namespace QuizApi.Domain.Entities
         public int Score { get; set; }
         public DateTime CompletedAt { get; set; }
         public int CorrectAnswers { get; set; }
-        public User User { get; set; }
-        public Quiz Quiz { get; set; }
     }
 }

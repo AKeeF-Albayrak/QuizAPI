@@ -9,15 +9,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{8F49AB05-7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{31543140-5F6C-46AF-A03C-FA8ED76662FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizAPI.Application", "Core\QuizApi.Application\QuizAPI.Application.csproj", "{8E8C1225-A3BB-4702-836F-8E67CC02CF52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApi.Application", "Core\QuizApi.Application\QuizApi.Application.csproj", "{8E8C1225-A3BB-4702-836F-8E67CC02CF52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizAPI.Domain", "Core\QuizApi.Domain\QuizAPI.Domain.csproj", "{552A5EBC-3B83-4398-8122-78B571F3A680}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApi.Domain", "Core\QuizApi.Domain\QuizApi.Domain.csproj", "{552A5EBC-3B83-4398-8122-78B571F3A680}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizAPI.Infrastructure", "Infrastructure\QuizApi.Infrastructure\QuizAPI.Infrastructure.csproj", "{F70E61DF-7894-4D19-8419-ED9C35EED45F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApi.Infrastructure", "Infrastructure\QuizApi.Infrastructure\QuizApi.Infrastructure.csproj", "{F70E61DF-7894-4D19-8419-ED9C35EED45F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizAPI.Persistence", "Infrastructure\QuizApi.Persistence\QuizAPI.Persistence.csproj", "{2D084F12-B15C-4193-9391-6C8F35768664}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApi.Persistence", "Infrastructure\QuizApi.Persistence\QuizApi.Persistence.csproj", "{2D084F12-B15C-4193-9391-6C8F35768664}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizAPI.API", "Presentation\QuizApi.Api\QuizAPI.API.csproj", "{E8C353E7-3901-43CA-BAD2-7B24971AAF81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApi.Api", "Presentation\QuizApi.Api\QuizApi.Api.csproj", "{E8C353E7-3901-43CA-BAD2-7B24971AAF81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

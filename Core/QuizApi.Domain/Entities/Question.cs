@@ -14,7 +14,5 @@ namespace QuizApi.Domain.Entities
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
 
-        // Navigation property to link to Quiz
-        public Quiz Quiz { get; set; }
     }
 }

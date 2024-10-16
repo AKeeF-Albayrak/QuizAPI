@@ -12,8 +12,5 @@ namespace QuizApi.Domain.Entities
         public Guid QuestionId { get; set; }
         public string Text { get; set; }
         public bool IsCorrect { get; set; }
-
-        // Navigation property to link to Question
-        public Question Question { get; set; }
     }
 }
