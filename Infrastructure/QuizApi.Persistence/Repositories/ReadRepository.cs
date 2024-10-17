@@ -25,7 +25,7 @@ namespace QuizAPI.Persistence.Repositories
         public async Task<T> GetByIdAsync(Guid id) => await Table.FindAsync(id);
         public async Task<IEnumerable<T>> GetAllAsync() => await Table.ToListAsync();
         public async Task<IEnumerable<T>> GetWhereAsync(Expression<Func<T, bool>> predicate) => await Table.Where(predicate).ToListAsync();
-        public async Task<T?> GetFirstAsync(Expression<Func<T, bool>> predicate) => await Table.FirstOrDefaultAsync(predicate);
+        public async Task<T> GetFirstAsync(Expression<Func<T, bool>> predicate) => await Table.FirstOrDefaultAsync(predicate);
         public async Task<int> CountAsync() => await Table.CountAsync();
     }
 }

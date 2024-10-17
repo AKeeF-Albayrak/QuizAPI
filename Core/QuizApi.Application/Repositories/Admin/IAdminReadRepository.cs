@@ -9,5 +9,6 @@ namespace QuizAPI.Application.Repositories
 {
     public interface IAdminReadRepository : IReadRepository<Admin>
     {
+        Task<Admin> GetAdminByUsernameAsync(string username);
     }
 }

@@ -9,5 +9,6 @@ namespace QuizAPI.Application.Repositories
 {
     public interface IQuestionReadRepository : IReadRepository<Question>
     {
+        public Task<IEnumerable<Question>> GetQuestionsByQuizIdAsync(string id);
     }
 }

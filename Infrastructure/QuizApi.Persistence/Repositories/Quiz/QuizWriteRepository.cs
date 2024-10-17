@@ -30,5 +30,7 @@ namespace QuizAPI.Persistence.Repositories
             }
             await Table.AddAsync(quiz);
         }
+
+        
     }
 }

@@ -6,7 +6,7 @@ using QuizAPI.Persistence.Repositories;
 
 namespace QuizApi.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
