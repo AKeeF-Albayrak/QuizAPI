@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.FileProviders;
+using QuizApi.Domain.StaticVariables;
+using QuizApi.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +14,7 @@ builder.Services.AddPersistenceServices();
 builder.Services.AddControllers();
 
 // JWT Authentication
-var key = Encoding.UTF8.GetBytes("your_secure_key_here_12345678"); // Güvenli bir anahtar belirleyin
+var key = Encoding.UTF8.GetBytes(StaticVariables.SecureKey); // Güvenli bir anahtar belirleyin
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -67,15 +70,35 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "QuizAPI v1");
+        c.RoutePrefix = "swagger"; // Swagger UI'ye eriþim yolu
+    });
 }
+
+app.UseCors(builder =>
+{
+    builder.WithOrigins("https://localhost:7265") // Frontend URL'si
+           .AllowAnyHeader()
+           .AllowAnyMethod();
+});
 
 app.UseHttpsRedirection();
 
-// Add authentication and authorization middleware
+// Statik dosyalarýn sunulmasý
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "Frontend")),
+    RequestPath = "/Frontend"
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+//https://localhost:7265/Frontend/Views/Login/Login.html
+//https://localhost:7265/Frontend/Views/Home/Home.html

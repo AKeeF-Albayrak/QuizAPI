@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using QuizApi.Application.Repositories;
 using QuizApi.Persistence.Contexts;
+using QuizApi.Persistence.Repositories;
 using QuizAPI.Application.Repositories;
 using QuizAPI.Persistence.Repositories;
 using System;
@@ -30,6 +32,7 @@ namespace QuizAPI.Persistence
             services.AddScoped<IQuizWriteRepository, QuizWriteRepository>();
             services.AddScoped<IQuizResultReadRepository, QuizResultReadRepository>();
             services.AddScoped<IQuizResultWriteRepository, QuizResultWriteRepository>();
+            services.AddScoped<ITokenRepository, TokenRepository>();
 
         }
     }
