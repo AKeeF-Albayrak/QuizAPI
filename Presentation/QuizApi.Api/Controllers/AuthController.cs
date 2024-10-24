@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using QuizApi.Domain.Entities;
 using QuizAPI.Application.Repositories;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -9,6 +8,8 @@ using System.Text;
 using System.Security.Cryptography;
 using QuizApi.Domain.StaticVariables;
 using QuizApi.Application.Repositories;
+using QuizApi.Domain.Models;
+using QuizApi.Domain.Entities;
 
 namespace QuizApi.Api.Controllers
 {
@@ -17,11 +18,13 @@ namespace QuizApi.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IUserReadRepository _userReadRepository;
+        private readonly IUserWriteRepository _userWriteRepository;
         private readonly IAdminReadRepository _adminReadRepository;
         private readonly ITokenRepository _tokenRepository;
 
-        public AuthController(IUserReadRepository userReadRepository, IAdminReadRepository adminReadRepository, ITokenRepository tokenRepository)
+        public AuthController(IUserReadRepository userReadRepository, IAdminReadRepository adminReadRepository, ITokenRepository tokenRepository, IUserWriteRepository userWriteRepository)
         {
+            _userWriteRepository = userWriteRepository;
             _userReadRepository = userReadRepository;
             _adminReadRepository = adminReadRepository;
             _tokenRepository = tokenRepository;
@@ -37,7 +40,8 @@ namespace QuizApi.Api.Controllers
                 {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Role, "User")
+                new Claim(ClaimTypes.Role, "User"),
+                new Claim("id", user.Id.ToString())
             };
 
                 var token = GenerateToken(claims);
@@ -49,10 +53,11 @@ namespace QuizApi.Api.Controllers
             {
                 var claims = new[]
                 {
-                new Claim(JwtRegisteredClaimNames.Sub, admin.Username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Role, "Admin")
-            };
+                    new Claim(JwtRegisteredClaimNames.Sub, admin.Username),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(ClaimTypes.Role, "Admin"),
+                    new Claim("id", admin.Id.ToString())
+                };
 
                 var token = GenerateToken(claims);
                 return Ok(new { token });
@@ -78,11 +83,37 @@ namespace QuizApi.Api.Controllers
         }
 
         [HttpPost("logout")]
-        public IActionResult Logout()
-        {
+        public IActionResult Logout(){
             var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             _tokenRepository.InvalidateToken(token);
             return Ok(new { message = "Logout successful!" });
+        }
+
+        [HttpPost("signup")]
+        public async Task<IActionResult> SignUp([FromBody] SignUpModel model) {
+
+            var test = await _userReadRepository.GetUserByUsernameAsync(model.Username);
+            var test2 = await _userReadRepository.GetUserByEmailAsync(model.Email);
+            if (test != null)
+            {
+                return BadRequest("This Username Already Exists");
+            }
+            else if (test2 != null) 
+            { 
+                return BadRequest("This Email Already Taken!");
+            }
+
+            User user = new User
+            {
+                Username = model.Username,
+                Email = model.Email,
+                Password = model.Password,
+            };
+
+            await _userWriteRepository.AddAsync(user);
+            await _userWriteRepository.SaveChangesAsync();
+
+            return Ok(user);
         }
     }
 }

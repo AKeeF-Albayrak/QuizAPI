@@ -23,5 +23,10 @@ namespace QuizAPI.Persistence.Repositories
         {
             return await Table.SingleOrDefaultAsync(u => u.Username == username);
         }
+
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            return await Table.SingleOrDefaultAsync(u => u.Email == email);
+        }
     }
 }

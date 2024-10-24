@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using QuizApi.Domain.Dtos.QuizDtos;
 using QuizApi.Domain.Entities;
 using QuizAPI.Application.Repositories;
 
@@ -20,8 +22,21 @@ namespace QuizApi.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddQuiz(Quiz quiz)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddQuiz([FromBody] AddQuizDto dto)
         {
+            var adminIdClaim = User.Claims.FirstOrDefault(c => c.Type == "id");
+            Guid adminId = Guid.Parse(adminIdClaim.Value);
+
+            Quiz quiz = new Quiz 
+            { 
+                Id = Guid.NewGuid(),
+                Title = dto.Title,
+                Description = dto.Description,
+                Category = dto.Catagory,
+                Duration = dto.Duration,
+                AdminId = adminId,
+            };
             await _quizWriteRepository.AddAsync(quiz);
             await _quizWriteRepository.SaveChangesAsync();
             return Ok("Quiz Added Succsessfully");

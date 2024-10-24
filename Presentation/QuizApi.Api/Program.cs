@@ -1,11 +1,10 @@
-using QuizAPI.Persistence;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.OpenApi.Models;
+ï»¿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using QuizApi.Domain.StaticVariables;
-using QuizApi.Api;
+using QuizAPI.Persistence;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +12,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddPersistenceServices();
 builder.Services.AddControllers();
 
+// CORS ayarlarÄ±nÄ± ekleyin
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        policy =>
+        {
+            policy.AllowAnyOrigin()  // TÃ¼m domainlerden istekler kabul edilir
+                  .AllowAnyHeader()  // TÃ¼m baÅŸlÄ±klar kabul edilir
+                  .AllowAnyMethod(); // TÃ¼m HTTP metodlarÄ± kabul edilir
+        });
+});
+
 // JWT Authentication
-var key = Encoding.UTF8.GetBytes(StaticVariables.SecureKey); // Güvenli bir anahtar belirleyin
+var key = Encoding.UTF8.GetBytes(StaticVariables.SecureKey); // GÃ¼venli bir anahtar belirleyin
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -28,17 +39,16 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = false,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("0iABIYPO/aKD9vnMEtoPzJM+9Tn7hrUrBmClVKSoo1o=")) // Burada sabit anahtar kullanýlmalý
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticVariables.SecureKey))
     };
 });
 
-// Swagger yapýlandýrmasý
+// Swagger yapÄ±landÄ±rmasÄ±
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "QuizAPI", Version = "v1" });
-
-    // JWT Authentication ayarlarý
+    // JWT Authentication ayarlarÄ±
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -47,7 +57,6 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.Http,
         Scheme = "bearer"
     });
-
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -73,20 +82,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "QuizAPI v1");
-        c.RoutePrefix = "swagger"; // Swagger UI'ye eriþim yolu
+        c.RoutePrefix = "swagger";
     });
 }
 
-app.UseCors(builder =>
-{
-    builder.WithOrigins("https://localhost:7265") // Frontend URL'si
-           .AllowAnyHeader()
-           .AllowAnyMethod();
-});
-
 app.UseHttpsRedirection();
 
-// Statik dosyalarýn sunulmasý
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
@@ -94,11 +95,13 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/Frontend"
 });
 
+app.UseRouting();
+
+app.UseCors("AllowAllOrigins");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
-//https://localhost:7265/Frontend/Views/Login/Login.html
-//https://localhost:7265/Frontend/Views/Home/Home.html

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace QuizAPI.Application.Repositories
 {
-    public interface IWriteRepository<T> : IRepository<T> where T : BaseEntity
+    public interface IWriteRepository<T> : IRepository<T> where T : class
     {
         Task AddAsync(T model);
         Task AddRangeAsync(IEnumerable<T> models);

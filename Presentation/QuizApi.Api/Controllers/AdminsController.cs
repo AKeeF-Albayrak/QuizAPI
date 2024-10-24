@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizApi.Domain.Entities;
+using QuizApi.Domain.Models;
+using QuizApi.Domain.Dtos.AdminDtos;
 using QuizAPI.Application.Repositories;
 
 namespace QuizApi.Api.Controllers
@@ -18,8 +20,14 @@ namespace QuizApi.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAdmin([FromBody] Admin admin)
+        public async Task<IActionResult> AddAdmin([FromBody] AddAdminDto dto)
         {
+            Admin admin = new Admin
+            {
+                Username = dto.Username,
+                Password = dto.Password,
+            };
+
             await _adminWriteRepository.AddAsync(admin);
             await _adminWriteRepository.SaveChangesAsync();
             return Ok("Admin basariyla eklendi");
@@ -47,7 +55,5 @@ namespace QuizApi.Api.Controllers
                 return NotFound("Invalid Id");
             }
         }
-
-
     }
 }

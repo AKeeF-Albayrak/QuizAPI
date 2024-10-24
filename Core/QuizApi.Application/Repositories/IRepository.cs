@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace QuizAPI.Application.Repositories
 {
-    public interface IRepository<T> where T : BaseEntity
+    public interface IRepository<T> where T : class
     {
         DbSet<T> Table { get; }
     }

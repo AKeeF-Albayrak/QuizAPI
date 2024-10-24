@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace QuizAPI.Persistence.Repositories
 {
-    public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
+    public class WriteRepository<T> : IWriteRepository<T> where T : class
     {
         private readonly QuizAPIDbContext _context;
 

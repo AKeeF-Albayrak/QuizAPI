@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using QuizApi.Domain.Dtos.QuestionDtos;
 using QuizApi.Domain.Entities;
 using QuizAPI.Application.Repositories;
 using System.Reflection.Metadata.Ecma335;
@@ -28,8 +29,15 @@ namespace QuizApi.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AddQuestionAsync([FromBody] Question question)
+        public async Task<IActionResult> AddQuestionAsync([FromBody] AddQuestionDto dto)
         {
+            Question question = new Question
+            {
+                Id = Guid.NewGuid(),
+                QuestionText = dto.QuestionText,
+                QuestionType = dto.QuestionType,
+                QuizId = dto.QuizId,
+            };
             await _questionWriteRepository.AddAsync(question);
             await _questionWriteRepository.SaveChangesAsync();
             return Ok(question);

@@ -15,7 +15,7 @@ namespace QuizApi.Domain.Entities
         public QuizCategory Category { get; set; }
         public int Duration { get; set; }
         public Guid AdminId { get; set; }
-        public ICollection<Question> Questions { get; set; } = new List<Question>(); // Soruların listesi
-        public ICollection<QuizResult> QuizResults { get; set; } = new List<QuizResult>(); // Quiz sonuçları
+        public ICollection<Question> Questions { get; set; } = new List<Question>();
+        public ICollection<QuizResult> QuizResults { get; set; } = new List<QuizResult>();
     }
 }

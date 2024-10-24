@@ -19,14 +19,6 @@ namespace QuizApi.Api.Controllers
             _userWriteRepository = userWriteRepository;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddUser([FromBody] User user)
-        {
-            await _userWriteRepository.AddAsync(user);
-            await _userWriteRepository.SaveChangesAsync();
-            return  Ok("Kullanici Basariyla eklendi");
-        }
-
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(string id)
         {
